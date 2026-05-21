@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>상세 정보</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",sans-serif;background:#f5efe7;color:#2a1f15;line-height:1.5;min-height:100vh}
+.container{max-width:480px;margin:0 auto;background:#fff;min-height:100vh;box-shadow:0 0 30px rgba(0,0,0,.08);position:relative}
+.cover{padding:40px 24px 30px;text-align:center;position:relative;background:linear-gradient(180deg,#fdf6ef 0%,#fff 100%)}
+.cover .badge{display:inline-block;font-size:11px;letter-spacing:3px;color:#8a6a4a;font-weight:700;margin-bottom:14px}
+.cover h1{font-size:26px;font-weight:800;color:#2a1f15;margin-bottom:8px;line-height:1.3}
+.cover .subtitle{font-size:15px;color:#7a5a3a;font-weight:600;margin-bottom:18px}
+.cover .when{font-size:14px;color:#5a3a1a;font-weight:600;padding:8px 16px;background:rgba(232,79,127,.08);border-radius:20px;display:inline-block}
+.section{padding:24px;border-top:1px solid #eee5d8}
+.section:first-of-type{border-top:none}
+.section h2{font-size:15px;font-weight:800;color:#8a4a5a;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section h2 .icon{font-size:18px}
+.info-row{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px dashed #f0e6d8;gap:12px}
+.info-row:last-child{border-bottom:none}
+.info-row .label{font-size:13px;color:#7a5a3a;font-weight:700;min-width:80px;flex-shrink:0}
+.info-row .value{font-size:14px;color:#2a1f15;font-weight:600;text-align:right;flex:1;word-break:break-all}
+.info-row .value a{color:#e84f7f;text-decoration:none;font-weight:700}
+.address-block{background:#fdf8f1;border-radius:10px;padding:14px 16px}
+.address-block .place{font-size:15px;font-weight:800;color:#2a1f15;margin-bottom:4px}
+.address-block .addr{font-size:13px;color:#5a3a1a;line-height:1.5}
+.contact-list{display:flex;flex-direction:column;gap:10px}
+.contact-card{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:#fdf8f1;border-radius:10px;border:1px solid #f0e6d8}
+.contact-card .name{font-size:13px;font-weight:700;color:#5a3a1a}
+.contact-card .role{font-size:11px;color:#9a7a5a;display:block;margin-bottom:2px}
+.contact-card .phone{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #e8b6c4;border-radius:18px;padding:6px 14px;text-decoration:none;color:#c04060;font-size:13px;font-weight:800}
+.contact-card .phone:hover{background:#fff2f6}
+.account-list{display:flex;flex-direction:column;gap:10px}
+.account-card{padding:14px;background:#fdf8f1;border-radius:10px;border:1px solid #f0e6d8}
+.account-card .who{font-size:11px;color:#9a7a5a;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.account-card .who .tag{background:#fff;border:1px solid #e8b6c4;color:#c04060;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:800}
+.account-card .holder{font-size:14px;font-weight:800;color:#2a1f15;margin-bottom:6px}
+.account-card .bank-num{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.account-card .bank{font-size:13px;color:#5a3a1a;font-weight:600;flex:1}
+.account-card .copy-btn{background:#e84f7f;color:#fff;border:none;border-radius:14px;padding:6px 12px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap}
+.account-card .copy-btn:hover{background:#d63d6d}
+.account-card .copy-btn.copied{background:#16a34a}
+.gallery{display:grid;grid-template-columns:1fr;gap:10px}
+.gallery img{width:100%;border-radius:10px;display:block}
+.map-btns{display:flex;gap:8px;flex-wrap:wrap}
+.map-btn{flex:1;min-width:80px;text-decoration:none;background:#fff;border:1.5px solid #d8c2a8;border-radius:10px;padding:12px 8px;text-align:center;font-size:12px;font-weight:800;color:#5a3a1a}
+.map-btn:hover{background:#fdf8f1}
+.map-btn .emoji{display:block;font-size:18px;margin-bottom:4px}
+.empty-tip{text-align:center;padding:30px 20px;color:#9a7a5a;font-size:13px}
+.footer{padding:20px 24px 30px;text-align:center;font-size:11px;color:#9a7a5a;border-top:1px solid #eee5d8;background:#fdf8f1}
+.footer a{color:#8a6a4a;text-decoration:none}
+.error-box{padding:60px 24px;text-align:center}
+.error-box h1{font-size:18px;color:#5a3a1a;margin-bottom:8px}
+.error-box p{font-size:13px;color:#7a5a3a}
+.section.collapse{padding-top:0;border-top:0}
+.add-account-info{font-size:11px;color:#9a7a5a;margin-top:8px;text-align:center}
+@media (max-width:380px){
+  .container{box-shadow:none}
+  .cover{padding:30px 18px 24px}
+  .section{padding:20px 18px}
+}
+
+:root{--mc-card-scale:1;--mc-card-base-w:560px;--mc-card-base-h:792px}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+</style>
+</head>
+<body>
+<div class="container" id="container">
+  <div class="empty-tip">불러오는 중...</div>
+</div>
+<script>
+// === 상세 페이지 뷰어 ===
+function decodeData(){
+  try{
+    var h = location.hash || location.search;
+    if(!h) { console.log('[view] no hash/search'); return null; }
+    // Try hash first, then search
+    var m = h.match(/[#?&]data=([^&]+)/);
+    if(!m) return null;
+    var encoded = decodeURIComponent(m[1]);
+    // base64 + url-safe decode
+    encoded = encoded.replace(/-/g,'+').replace(/_/g,'/');
+    var pad = encoded.length % 4;
+    if(pad) encoded += '='.repeat(4-pad);
+    var json = atob(encoded);
+    // try UTF-8 decode
+    try {
+      json = decodeURIComponent(escape(json));
+    } catch(e){}
+    return JSON.parse(json);
+  } catch(e){
+    console.log('decode error', e);
+    return null;
+  }
+}
+
+function esc(s){
+  if(s == null) return '';
+  return String(s).replace(/[<>&"']/g, function(c){
+    return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+function nl2br(s){ return esc(s).replace(/\n/g, '<br>'); }
+
+function copyText(text, btn){
+  var done = function(){
+    var orig = btn.textContent;
+    btn.classList.add('copied');
+    btn.textContent = '복사됨!';
+    setTimeout(function(){
+      btn.classList.remove('copied');
+      btn.textContent = orig;
+    }, 1500);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(function(){
+      fallback();
+    });
+  } else {
+    fallback();
+  }
+  function fallback(){
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try{ document.execCommand('copy'); done(); }catch(e){ alert('복사 실패: ' + text); }
+    document.body.removeChild(ta);
+  }
+}
+
+function buildMapLinks(addr){
+  if(!addr) return '';
+  var enc = encodeURIComponent(addr);
+  return '<div class="map-btns">' +
+    '<a class="map-btn" href="https://map.naver.com/p/search/' + enc + '" target="_blank" rel="noopener"><span class="emoji">🗺️</span>네이버지도</a>' +
+    '<a class="map-btn" href="https://map.kakao.com/link/search/' + enc + '" target="_blank" rel="noopener"><span class="emoji">🗺️</span>카카오맵</a>' +
+    '<a class="map-btn" href="https://www.google.com/maps/search/?api=1&query=' + enc + '" target="_blank" rel="noopener"><span class="emoji">🗺️</span>구글맵</a>' +
+    '</div>';
+}
+
+function renderContacts(contacts){
+  if(!contacts || !contacts.length) return '';
+  var html = '<div class="contact-list">';
+  contacts.forEach(function(c){
+    if(!c || !c.phone) return;
+    var role = c.role ? '<span class="role">' + esc(c.role) + '</span>' : '';
+    html += '<div class="contact-card">' +
+      '<div>' + role + '<span class="name">' + esc(c.name || '') + '</span></div>' +
+      '<a class="phone" href="tel:' + esc(c.phone.replace(/[^0-9+]/g,'')) + '">📞 ' + esc(c.phone) + '</a>' +
+      '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderAccounts(accounts){
+  if(!accounts || !accounts.length) return '';
+  var html = '<div class="account-list">';
+  accounts.forEach(function(a){
+    if(!a || !a.number) return;
+    var roleTag = a.role ? '<span class="tag">' + esc(a.role) + '</span>' : '';
+    var full = (a.bank || '') + ' ' + a.number;
+    html += '<div class="account-card">' +
+      '<div class="who">' + roleTag + '</div>' +
+      '<div class="holder">' + esc(a.holder || '') + '</div>' +
+      '<div class="bank-num">' +
+        '<div class="bank">' + esc(a.bank || '') + ' ' + esc(a.number) + '</div>' +
+        '<button class="copy-btn" data-copy="' + esc(full.trim()) + '">📋 복사</button>' +
+      '</div>' +
+      '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderGallery(photos){
+  if(!photos || !photos.length) return '';
+  var html = '<div class="gallery">';
+  photos.forEach(function(p){
+    if(!p) return;
+    html += '<img src="' + esc(p) + '" alt="" loading="lazy">';
+  });
+  html += '</div>';
+  return html;
+}
+
+// === 카테고리별 템플릿 ===
+var templates = {
+  wedding_inv: function(d){
+    var bride = d.bride || '';
+    var groom = d.groom || '';
+    var title = d.title || (groom && bride ? groom + ' · ' + bride : '결혼식 안내');
+    var html = '';
+    // Cover
+    html += '<div class="cover">';
+    html += '<div class="badge">WEDDING INVITATION</div>';
+    html += '<h1>' + esc(title) + '</h1>';
+    if(d.subtitle) html += '<div class="subtitle">' + esc(d.subtitle) + '</div>';
+    if(d.datetime) html += '<div class="when">📅 ' + esc(d.datetime) + '</div>';
+    html += '</div>';
+    // Gallery (selectable)
+    if(d.photos && d.photos.length){
+      html += '<div class="section"><h2><span class="icon">📷</span>갤러리</h2>' + renderGallery(d.photos) + '</div>';
+    }
+    // Address (required)
+    if(d.place || d.address){
+      html += '<div class="section"><h2><span class="icon">📍</span>오시는 길</h2>';
+      html += '<div class="address-block">';
+      if(d.place) html += '<div class="place">' + esc(d.place) + '</div>';
+      if(d.address) html += '<div class="addr">' + esc(d.address) + '</div>';
+      html += '</div>';
+      // Map (optional)
+      if(d.mapUrl){
+        html += '<div style="margin-top:10px"><a class="map-btn" href="' + esc(d.mapUrl) + '" target="_blank" rel="noopener" style="display:block">🗺️ 약도 보기</a></div>';
+      } else if(d.address){
+        html += '<div style="margin-top:10px">' + buildMapLinks(d.address) + '</div>';
+      }
+      html += '</div>';
+    }
+    // Contacts (required)
+    if(d.contacts && d.contacts.length){
+      html += '<div class="section"><h2><span class="icon">📞</span>연락처</h2>' + renderContacts(d.contacts) + '</div>';
+    }
+    // Accounts (optional)
+    if(d.accounts && d.accounts.length){
+      html += '<div class="section"><h2><span class="icon">💝</span>마음 전하실 곳</h2>' + renderAccounts(d.accounts) + '</div>';
+    }
+    return html;
+  },
+  party_inv: function(d){
+    var title = d.title || '초대합니다';
+    var html = '<div class="cover">';
+    html += '<div class="badge">YOU ARE INVITED</div>';
+    html += '<h1>' + esc(title) + '</h1>';
+    if(d.subtitle) html += '<div class="subtitle">' + esc(d.subtitle) + '</div>';
+    if(d.datetime) html += '<div class="when">📅 ' + esc(d.datetime) + '</div>';
+    html += '</div>';
+    if(d.photos && d.photos.length){
+      html += '<div class="section"><h2><span class="icon">📷</span>포스터 / 사진</h2>' + renderGallery(d.photos) + '</div>';
+    }
+    if(d.place || d.address){
+      html += '<div class="section"><h2><span class="icon">📍</span>장소</h2>';
+      html += '<div class="address-block">';
+      if(d.place) html += '<div class="place">' + esc(d.place) + '</div>';
+      if(d.address) html += '<div class="addr">' + esc(d.address) + '</div>';
+      html += '</div>';
+      if(d.mapUrl){
+        html += '<div style="margin-top:10px"><a class="map-btn" href="' + esc(d.mapUrl) + '" target="_blank" rel="noopener" style="display:block">🗺️ 약도 보기</a></div>';
+      } else if(d.address){
+        html += '<div style="margin-top:10px">' + buildMapLinks(d.address) + '</div>';
+      }
+      html += '</div>';
+    }
+    if(d.contacts && d.contacts.length){
+      html += '<div class="section"><h2><span class="icon">📞</span>주최 / 연락처</h2>' + renderContacts(d.contacts) + '</div>';
+    }
+    if(d.fee){
+      html += '<div class="section"><h2><span class="icon">🎫</span>입장료 / 티켓</h2>';
+      html += '<div class="address-block"><div class="addr">' + nl2br(d.fee) + '</div></div>';
+      html += '</div>';
+    }
+    return html;
+  },
+  seminar_inv: function(d){
+    var title = d.title || '세미나 안내';
+    var html = '<div class="cover">';
+    html += '<div class="badge">SEMINAR</div>';
+    html += '<h1>' + esc(title) + '</h1>';
+    if(d.subtitle) html += '<div class="subtitle">' + esc(d.subtitle) + '</div>';
+    if(d.datetime) html += '<div class="when">📅 ' + esc(d.datetime) + '</div>';
+    html += '</div>';
+    if(d.place || d.address){
+      html += '<div class="section"><h2><span class="icon">📍</span>장소</h2>';
+      html += '<div class="address-block">';
+      if(d.place) html += '<div class="place">' + esc(d.place) + '</div>';
+      if(d.address) html += '<div class="addr">' + esc(d.address) + '</div>';
+      html += '</div>';
+      if(d.mapUrl){
+        html += '<div style="margin-top:10px"><a class="map-btn" href="' + esc(d.mapUrl) + '" target="_blank" rel="noopener" style="display:block">🗺️ 약도 보기</a></div>';
+      } else if(d.address){
+        html += '<div style="margin-top:10px">' + buildMapLinks(d.address) + '</div>';
+      }
+      html += '</div>';
+    }
+    if(d.contacts && d.contacts.length){
+      html += '<div class="section"><h2><span class="icon">📞</span>주관 / 연락처</h2>' + renderContacts(d.contacts) + '</div>';
+    }
+    if(d.program){
+      html += '<div class="section"><h2><span class="icon">📋</span>프로그램</h2>';
+      html += '<div class="address-block"><div class="addr">' + nl2br(d.program) + '</div></div>';
+      html += '</div>';
+    }
+    if(d.register){
+      html += '<div class="section"><h2><span class="icon">✍️</span>등록 안내</h2>';
+      html += '<div class="address-block"><div class="addr">' + nl2br(d.register) + '</div></div>';
+      html += '</div>';
+    }
+    return html;
+  },
+  obituary: function(d){
+    var name = d.deceased || '故 ○○○';
+    var html = '<div class="cover" style="background:linear-gradient(180deg,#f5f5f0 0%,#fff 100%)">';
+    html += '<div class="badge" style="color:#5a5a5a">OBITUARY</div>';
+    html += '<h1 style="color:#1a1a1a">' + esc(name) + '</h1>';
+    if(d.passedAt) html += '<div class="subtitle" style="color:#4a4a4a">' + esc(d.passedAt) + ' 별세</div>';
+    html += '</div>';
+    // 빈소
+    if(d.funeralHall || d.funeralRoom){
+      html += '<div class="section"><h2 style="color:#3a3a3a"><span class="icon">🕯️</span>빈소</h2>';
+      html += '<div class="address-block" style="background:#f5f5f0">';
+      if(d.funeralHall) html += '<div class="place">' + esc(d.funeralHall) + '</div>';
+      if(d.funeralRoom) html += '<div class="addr">' + esc(d.funeralRoom) + '</div>';
+      if(d.funeralAddress) html += '<div class="addr" style="margin-top:6px">' + esc(d.funeralAddress) + '</div>';
+      html += '</div>';
+      if(d.mapUrl){
+        html += '<div style="margin-top:10px"><a class="map-btn" href="' + esc(d.mapUrl) + '" target="_blank" rel="noopener" style="display:block">🗺️ 약도 보기</a></div>';
+      } else if(d.funeralAddress){
+        html += '<div style="margin-top:10px">' + buildMapLinks(d.funeralAddress) + '</div>';
+      }
+      html += '</div>';
+    }
+    // 발인
+    if(d.coffinOutAt){
+      html += '<div class="section"><h2 style="color:#3a3a3a"><span class="icon">🕊️</span>발인</h2>';
+      html += '<div class="info-row"><div class="label">일시</div><div class="value">' + esc(d.coffinOutAt) + '</div></div>';
+      if(d.burialPlace) html += '<div class="info-row"><div class="label">장지</div><div class="value">' + esc(d.burialPlace) + '</div></div>';
+      html += '</div>';
+    }
+    // 상주
+    if(d.contacts && d.contacts.length){
+      html += '<div class="section"><h2 style="color:#3a3a3a"><span class="icon">📞</span>상주 연락처</h2>' + renderContacts(d.contacts) + '</div>';
+    }
+    // 조의금
+    if(d.accounts && d.accounts.length){
+      html += '<div class="section"><h2 style="color:#3a3a3a"><span class="icon">🙏</span>조의금 계좌</h2>' + renderAccounts(d.accounts) + '</div>';
+    }
+    return html;
+  }
+};
+
+function render(){
+  var container = document.getElementById('container');
+  var data = decodeData();
+  if(!data){
+    container.innerHTML = '<div class="error-box"><h1>📭 정보가 없습니다</h1><p>유효한 상세 정보 링크가 아니거나, 만료된 링크입니다.</p></div>';
+    return;
+  }
+  var cat = data.cat || 'wedding_inv';
+  var tpl = templates[cat] || templates.wedding_inv;
+  var html = tpl(data);
+  html += '<div class="footer">📱 마음카드에서 만든 상세 정보</div>';
+  container.innerHTML = html;
+  // Bind copy buttons
+  document.querySelectorAll('.copy-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      copyText(btn.getAttribute('data-copy'), btn);
+    });
+  });
+  // Update document title
+  if(data.title){
+    document.title = data.title;
+  }
+}
+
+render();
+window.addEventListener('hashchange', render);
+
+// v35: friendly error if no data
+(function(){
+  try{
+    var data = decodeData();
+    if(!data){
+      var c = document.getElementById('container') || document.querySelector('.container') || document.body;
+      c.innerHTML = '<div style="padding:60px 24px;text-align:center;color:#6a4a30;font-family:-apple-system,sans-serif">' +
+        '<div style="font-size:48px;margin-bottom:20px">📭</div>' +
+        '<h2 style="margin-bottom:12px;color:#3a2a1a">상세 정보를 불러올 수 없습니다</h2>' +
+        '<p style="margin-bottom:24px;line-height:1.6">유효한 링크가 아닙니다.<br>' +
+        '마음카드에서 다시 생성된 QR/링크를 사용해 주세요.</p>' +
+        '<a href="./" style="display:inline-block;padding:10px 24px;background:#c8a878;color:#fff;border-radius:8px;text-decoration:none;font-weight:600">마음카드로 돌아가기</a>' +
+        '</div>';
+    }
+  }catch(e){ console.log('[view] init error', e); }
+})();
+
+
+// v51 CK FIX: view.html?id=xxxx 짧은 링크 로딩 지원
+async function fetchDetailDataById(){
+  try{
+    var params = new URLSearchParams(location.search || '');
+    var id = params.get('id');
+    if(!id) return null;
+    var res = await fetch('/.netlify/functions/cards?id=' + encodeURIComponent(id), {cache:'no-store'});
+    if(!res.ok) throw new Error('detail fetch failed: ' + res.status);
+    var out = await res.json();
+    var data = out && out.data ? out.data : out;
+    if(data && data._type === 'bundle' && data.detailData) return data.detailData;
+    return data;
+  }catch(e){
+    console.log('[view] id fetch error', e);
+    return null;
+  }
+}
+function renderDetailData(data){
+  var container = document.getElementById('container');
+  if(!container || !data) return;
+  var cat = data.cat || 'wedding_inv';
+  var tpl = templates[cat] || templates.wedding_inv;
+  var html = tpl(data);
+  html += '<div class="footer">📱 마음카드에서 만든 상세 정보</div>';
+  container.innerHTML = html;
+  document.querySelectorAll('.copy-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      copyText(btn.getAttribute('data-copy'), btn);
+    });
+  });
+  if(data.title) document.title = data.title;
+}
+(function(){
+  fetchDetailDataById().then(function(data){
+    if(data) renderDetailData(data);
+  });
+})();
+
+</script>
+</body>
+</html>
