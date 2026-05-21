@@ -1,0 +1,26 @@
+{
+  "id": "/?v=63-icon",
+  "name": "마음카드",
+  "short_name": "마음카드",
+  "description": "마음을 담은 카드, 한 장에 · 마음카드",
+  "start_url": "/?v=63-icon",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#e84f7f",
+  "icons": [
+    {
+      "src": "/icon-192-v63.png?v=63",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512-v63.png?v=63",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
